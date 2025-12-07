@@ -71,12 +71,14 @@
           </div>
         </div>
 
+        <!-- Connect With Me Section (unchanged) -->
         <div class="space-y-8">
           <div class="bg-zinc-900/50 backdrop-blur-sm rounded-xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300">
             <h2 class="text-2xl font-semibold text-zinc-100 mb-6">
               Connect With Me
             </h2>
             <div class="space-y-4">
+              <!-- LinkedIn -->
               <a
                 href="https://www.linkedin.com/in/abdullahalnahid0503/"
                 target="_blank"
@@ -91,7 +93,7 @@
                   <p class="text-sm text-gray-600 dark:text-gray-400">Connect professionally</p>
                 </div>
               </a>
-
+              <!-- GitHub -->
               <a
                 href="https://github.com/abdullahalnahid0503"
                 target="_blank"
@@ -106,7 +108,7 @@
                   <p class="text-sm text-gray-600 dark:text-gray-400">View my code</p>
                 </div>
               </a>
-
+              <!-- Instagram -->
               <a
                 href="https://www.instagram.com/abdullahal._.nahid/"
                 target="_blank"
@@ -150,15 +152,32 @@ const form = reactive({
 
 const submitted = ref(false)
 
-const handleSubmit = () => {
-  console.log('Form submitted:', form)
-  submitted.value = true
+const handleSubmit = async () => {
+  try {
+    const res = await fetch('https://formspree.io/f/mldqwdlp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        message: form.message
+      })
+    });
 
-  setTimeout(() => {
-    form.name = ''
-    form.email = ''
-    form.message = ''
-    submitted.value = false
-  }, 3000)
+    if (res.ok) {
+      submitted.value = true;
+      setTimeout(() => {
+        form.name = '';
+        form.email = '';
+        form.message = '';
+        submitted.value = false;
+      }, 3000);
+    } else {
+      alert('Failed to send message. Please try again.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error sending message. Check console.');
+  }
 }
 </script>
